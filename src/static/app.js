@@ -3,6 +3,74 @@ document.addEventListener("DOMContentLoaded", () => {
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+  const pullStringButton = document.getElementById("pull-string");
+  const lamp = document.getElementById("lamp");
+  const pullHandle = pullStringButton.querySelector(".pull-handle");
+  let isDarkMode = false;
+  let isDragging = false;
+  let dragStartY = 0;
+  let pullOffset = 0;
+
+  function applyDarkModeState() {
+    document.body.classList.toggle("dark-mode", isDarkMode);
+    lamp.classList.toggle("lamp-off", isDarkMode);
+    pullStringButton.setAttribute("aria-pressed", String(isDarkMode));
+  }
+
+  function toggleDarkMode() {
+    isDarkMode = !isDarkMode;
+    applyDarkModeState();
+  }
+
+  function updatePullVisual() {
+    const maxPull = 20;
+    const clampedPull = Math.max(-maxPull, Math.min(maxPull, pullOffset));
+    pullHandle.style.transform = `translateY(${clampedPull}px)`;
+    pullStringButton.style.transform = `translateY(${clampedPull * 0.5}px)`;
+  }
+
+  pullStringButton.addEventListener("pointerdown", (event) => {
+    isDragging = true;
+    dragStartY = event.clientY;
+    pullStringButton.setPointerCapture(event.pointerId);
+  });
+
+  pullStringButton.addEventListener("pointermove", (event) => {
+    if (!isDragging) {
+      return;
+    }
+
+    const deltaY = event.clientY - dragStartY;
+    pullOffset = Math.max(0, Math.min(deltaY, 30));
+    updatePullVisual();
+  });
+
+  function releasePull() {
+    if (!isDragging) {
+      return;
+    }
+
+    isDragging = false;
+
+    if (pullOffset > 12) {
+      toggleDarkMode();
+    }
+
+    pullOffset = 0;
+    updatePullVisual();
+  }
+
+  pullStringButton.addEventListener("pointerup", releasePull);
+  pullStringButton.addEventListener("pointerleave", releasePull);
+  pullStringButton.addEventListener("pointercancel", releasePull);
+  pullStringButton.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggleDarkMode();
+    }
+  });
+
+  applyDarkModeState();
 
   // Function to fetch activities from API
   async function fetchActivities() {
