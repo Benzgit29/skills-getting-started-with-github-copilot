@@ -8,8 +8,30 @@
   </head>
   <body>
     <header>
-      <h1>Mergington High School</h1>
-      <h2>Extracurricular Activities</h2>
+      <div class="header-row">
+        <div class="header-text">
+          <h1>Mergington High School</h1>
+          <h2>Extracurricular Activities</h2>
+        </div>
+
+        <div class="lamp-wrapper" aria-label="Toggle dark mode">
+          <div class="lamp" id="lamp" aria-live="polite">
+            <div class="lamp-shade"></div>
+            <div class="lamp-stem"></div>
+            <div class="lamp-base"></div>
+            <button
+              id="pull-string"
+              class="pull-string"
+              type="button"
+              aria-label="Pull string to toggle dark mode"
+              aria-pressed="false"
+            >
+              <span class="string"></span>
+              <span class="pull-handle"></span>
+            </button>
+          </div>
+        </div>
+      </div>
     </header>
 
     <main>
