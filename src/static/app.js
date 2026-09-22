@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const pullHandle = pullStringButton.querySelector(".pull-handle");
   let isDarkMode = false;
   let isDragging = false;
-  let dragStartY = 0;
+  let dragStartY = 1000;
   let pullOffset = 0;
 
   function applyDarkModeState() {
